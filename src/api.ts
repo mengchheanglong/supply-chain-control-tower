@@ -324,25 +324,82 @@ export const INITIAL_AUDIT_LOGS: AuditLogEntry[] = [
   },
 ];
 
-// Helper to probe cross-platform services
+// Operator credentials for operational supply-chain platform
+export const PLATFORM_TOKEN = '2rTa1EJWQC6EyeyhpIcsDf2rEpRPBLGAz7eFwCwRQQo';
+export const TENANT_ID = '0948f598-13c6-46ec-a0f5-0ec1b4984476';
+
+export interface ServiceEndpointConfig {
+  healthPath: string;
+  directBaseUrl: string;
+  proxyBaseUrl: string;
+}
+
+export const ECOSYSTEM_ENDPOINTS: Record<string, ServiceEndpointConfig> = {
+  ecommerce: {
+    healthPath: '/',
+    directBaseUrl: 'http://localhost:3001',
+    proxyBaseUrl: '/proxy/ecommerce',
+  },
+  supplyChain: {
+    healthPath: '/api/health/ready',
+    directBaseUrl: 'http://localhost:3100',
+    proxyBaseUrl: '/proxy/platform',
+  },
+  pathfinder: {
+    healthPath: '/api/health',
+    directBaseUrl: 'http://localhost:3000',
+    proxyBaseUrl: '/proxy/routing',
+  },
+  sandbox: {
+    healthPath: '/api/health',
+    directBaseUrl: 'http://localhost:3007',
+    proxyBaseUrl: '/proxy/sandbox',
+  },
+  intelligence: {
+    healthPath: '/api/health',
+    directBaseUrl: 'http://localhost:3200',
+    proxyBaseUrl: '/proxy/intelligence',
+  },
+};
+
+// Generic resilient fetch helper (tries Vite proxy first, falls back to direct URL)
+async function resilientFetch(
+  endpointKey: keyof typeof ECOSYSTEM_ENDPOINTS,
+  subpath: string,
+  options?: RequestInit
+): Promise<Response> {
+  const config = ECOSYSTEM_ENDPOINTS[endpointKey];
+  const proxyUrl = `${config.proxyBaseUrl}${subpath}`;
+  const directUrl = `${config.directBaseUrl}${subpath}`;
+
+  try {
+    const res = await fetch(proxyUrl, options);
+    if (res.ok || res.status === 409 || res.status === 400 || res.status === 404) return res;
+  } catch {
+    // Fall back to direct URL
+  }
+  return fetch(directUrl, options);
+}
+
+// Dynamic health probe across all 5 ecosystem microservices
 export async function probeMicroservices(): Promise<PlatformNodeTelemetry[]> {
-  const nodes: PlatformNodeTelemetry[] = [
+  const nodes: (PlatformNodeTelemetry & { endpointKey: keyof typeof ECOSYSTEM_ENDPOINTS })[] = [
     {
       id: 'node-ecommerce',
       name: 'E-Commerce Storefront Engine',
       subsystem: 'e-commerce',
       port: 3001,
       externalUiUrl: 'http://localhost:3001',
-      status: 'online',
-      latencyMs: 14,
+      status: 'offline',
+      latencyMs: 0,
       lastHeartbeat: new Date().toISOString(),
       metrics: {
-        'Active Stores': 1248,
-        '30d Orders': 18420,
-        'Checkout Gateway': '94.2% healthy',
-        'Next.js Worker': 'Port 3001 Active',
+        'Next.js Web': 'Port 3001 Active',
+        'Storefront': 'Connected via Bridge',
+        'Checkout Pipeline': 'Double-Entry Linked',
       },
       description: 'Multi-tenant online storefronts, customer carts, catalog, and checkout processing.',
+      endpointKey: 'ecommerce',
     },
     {
       id: 'node-supply-chain',
@@ -350,32 +407,34 @@ export async function probeMicroservices(): Promise<PlatformNodeTelemetry[]> {
       subsystem: 'supply-chain',
       port: 3100,
       externalUiUrl: 'http://localhost:3101',
-      status: 'online',
-      latencyMs: 8,
+      status: 'offline',
+      latencyMs: 0,
       lastHeartbeat: new Date().toISOString(),
       metrics: {
-        'PostGIS Hubs': '12 Distribution Hubs',
+        'PostGIS Hubs': '4 Regional Hubs',
         'Ledger State': 'Double-entry Balanced (0 variance)',
-        'Active Stock SKU': '18,520 SKU lines',
+        'Active SKUs': '4 Enterprise SKUs',
         'Fastify API': 'Port 3100 Active',
       },
       description: 'Physical inventory ledger, multi-echelon distribution network, PostGIS spatial hubs, and fulfillment demand.',
+      endpointKey: 'supplyChain',
     },
     {
       id: 'node-pathfinder',
       name: 'OSM Pathfinder Routing Daemon',
       subsystem: 'pathfinder',
       port: 3000,
-      status: 'online',
-      latencyMs: 4,
+      status: 'offline',
+      latencyMs: 0,
       lastHeartbeat: new Date().toISOString(),
       metrics: {
         'Engine': 'Rust Contraction Hierarchies',
-        'Road Network': '86 junctions / 224 directed edges',
-        'Matrix Latency': '3.2 ms avg',
+        'Road Network': '86 nodes / 224 edges',
+        'Matrix Latency': '< 5 ms avg',
         'Vehicle Profiles': 'Truck, Van, Cargo Bike',
       },
       description: 'High-performance physical road graph calculation, asymmetric turn penalties, and travel time matrices.',
+      endpointKey: 'pathfinder',
     },
     {
       id: 'node-sandbox',
@@ -383,50 +442,220 @@ export async function probeMicroservices(): Promise<PlatformNodeTelemetry[]> {
       subsystem: 'sandbox',
       port: 3007,
       externalUiUrl: 'http://localhost:5173',
-      status: 'online',
-      latencyMs: 12,
+      status: 'offline',
+      latencyMs: 0,
       lastHeartbeat: new Date().toISOString(),
       metrics: {
-        'Sim Clock': 'Deterministic Tick (10x)',
-        'Active Couriers': '42 Simulated Vehicles',
-        'Completed Missions': '1,490 Trips',
-        'Replay SHA-256': 'Pinned Verification Verified',
+        'Sim Clock': 'Discrete Tick Loop',
+        'Active Couriers': '40 Vehicles',
+        'Operational Ingestion': 'Filter allocated > 0',
+        'Isolation Gate': 'Read-Only (Zero DB Writes)',
       },
       description: 'Simulation environment for agent fleet testing, synthetic driver telemetry, dispatch optimization, and replay.',
+      endpointKey: 'sandbox',
     },
     {
       id: 'node-intelligence',
       name: 'Distribution Intelligence Solver',
       subsystem: 'intelligence',
       port: 3200,
-      status: 'online',
-      latencyMs: 19,
+      status: 'offline',
+      latencyMs: 0,
       lastHeartbeat: new Date().toISOString(),
       metrics: {
         'Algorithm': 'Hybrid VRPTW Metaheuristics',
-        'Scenarios Solved': '142 runs',
-        'Cost Reduction': '14.8% vs Baseline',
-        'Solver Engine': 'Port 3200 Active',
+        'Evaluators': 'PlanComparator, CostModel',
+        'Solvers': 'Greedy & ALNS Local Search',
+        'Service': 'Port 3200 Active',
       },
       description: 'Mathematical solver optimizing delivery routes, vehicle time windows, multi-capacity fleet assignments, and fuel overhead.',
+      endpointKey: 'intelligence',
     },
   ];
 
-  // Try dynamic pings with quick timeout (do not block UI if any service is down)
-  for (const node of nodes) {
-    try {
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 800);
-      const url = `http://localhost:${node.port}/health`;
-      const res = await fetch(url, { signal: controller.signal, mode: 'no-cors' }).catch(() => null);
-      clearTimeout(timeoutId);
-      if (res) {
-        node.status = 'online';
+  // Dynamically test each microservice concurrently
+  await Promise.all(
+    nodes.map(async (node) => {
+      const start = performance.now();
+      try {
+        const config = ECOSYSTEM_ENDPOINTS[node.endpointKey];
+        const res = await resilientFetch(node.endpointKey, config.healthPath);
+        const duration = Math.round(performance.now() - start);
+
+        if (res && (res.ok || res.status === 200 || res.status === 304)) {
+          node.status = 'online';
+          node.latencyMs = Math.max(1, duration);
+          node.lastHeartbeat = new Date().toISOString();
+        } else {
+          node.status = 'offline';
+        }
+      } catch {
+        node.status = 'offline';
       }
-    } catch {
-      // Keep mock telemetry gracefully
-    }
-  }
+    })
+  );
 
   return nodes;
+}
+
+// -------------------------------------------------------------
+// LIVE CROSS-REPOSITORY DATA CONNECTOR FUNCTIONS
+// -------------------------------------------------------------
+
+// 1. Fetch Real Operational Facilities from PostgreSQL / PostGIS
+export async function fetchOperationalFacilities() {
+  try {
+    const res = await resilientFetch('supplyChain', '/api/v1/facilities', {
+      headers: { Authorization: `Bearer ${PLATFORM_TOKEN}` },
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+    return data.items || [];
+  } catch (err) {
+    console.warn('[AdminAPI] Failed to fetch facilities from platform, falling back to master defaults', err);
+    return [
+      { id: 'DC-PNH-01', code: 'DC-PNH-01', name: 'Phnom Penh Central Fulfillment Hub', kind: 'warehouse', latitude: 11.5564, longitude: 104.9282 },
+      { id: 'DC-REP-01', code: 'DC-REP-01', name: 'Siem Reap Regional Depot', kind: 'depot', latitude: 13.3671, longitude: 103.8448 },
+      { id: 'DC-KOS-01', code: 'DC-KOS-01', name: 'Sihanoukville Coastal Cross-Dock', kind: 'warehouse', latitude: 10.6253, longitude: 103.5234 },
+      { id: 'DC-BAT-01', code: 'DC-BAT-01', name: 'Battambang Distribution Center', kind: 'depot', latitude: 13.0957, longitude: 103.2022 },
+    ];
+  }
+}
+
+// 2. Fetch Real Enterprise SKUs from PostgreSQL
+export async function fetchOperationalSkus() {
+  try {
+    const res = await resilientFetch('supplyChain', '/api/v1/skus', {
+      headers: { Authorization: `Bearer ${PLATFORM_TOKEN}` },
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+    return data.items || [];
+  } catch (err) {
+    console.warn('[AdminAPI] Failed to fetch SKUs from platform, falling back to master defaults', err);
+    return [
+      { id: 'SKU-FOOD-01', code: 'SKU-FOOD-01', name: 'Organic Jasmine Rice 25kg Bag', unit: 'each' },
+      { id: 'SKU-ELEC-01', code: 'SKU-ELEC-01', name: 'Solar Inverter Battery 5kWh', unit: 'each' },
+      { id: 'SKU-COLD-01', code: 'SKU-COLD-01', name: 'Temperature-Controlled Vaccine Vial', unit: 'each' },
+      { id: 'SKU-MED-01', code: 'SKU-MED-01', name: 'Emergency First Aid Kit (Type A)', unit: 'each' },
+    ];
+  }
+}
+
+// 3. Fetch Real Operational Fulfillment Orders from PostgreSQL
+export async function fetchOperationalOrders() {
+  try {
+    const res = await resilientFetch('supplyChain', '/api/v1/fulfillment/orders', {
+      headers: { Authorization: `Bearer ${PLATFORM_TOKEN}` },
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+    return data.items || [];
+  } catch (err) {
+    console.warn('[AdminAPI] Failed to fetch orders from platform', err);
+    return [];
+  }
+}
+
+// 4. Fetch Live OSM Pathfinder Graph Statistics
+export async function fetchPathfinderStats() {
+  try {
+    const res = await resilientFetch('pathfinder', '/api/graph/stats');
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    return await res.json();
+  } catch (err) {
+    console.warn('[AdminAPI] Failed to fetch graph stats from pathfinder', err);
+    return { nodes: 86, edges: 224, is_demo: true, dataset_name: 'demo-cambodia' };
+  }
+}
+
+// 5. Query Real Turn-by-Turn Route from OSM Pathfinder
+export async function fetchPathfinderRoute(
+  originLat: number,
+  originLon: number,
+  destLat: number,
+  destLon: number,
+  profile: 'van' | 'truck' | 'bike' = 'van'
+) {
+  try {
+    const res = await resilientFetch('pathfinder', '/api/route', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        start_lat: originLat,
+        start_lon: originLon,
+        end_lat: destLat,
+        end_lon: destLon,
+        algorithm: 'astar',
+        metric: 'time',
+        departure_time: '08:00',
+        profile,
+      }),
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    return await res.json();
+  } catch (err) {
+    console.warn('[AdminAPI] Failed to query route from pathfinder', err);
+    return null;
+  }
+}
+
+// 6. Trigger Live VRPTW Solver Run on Distribution Intelligence
+export async function fetchOptimizerSolve(problemPayload?: any) {
+  try {
+    const res = await resilientFetch('intelligence', '/api/optimizer/solve', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(problemPayload || {}),
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    return await res.json();
+  } catch (err) {
+    console.warn('[AdminAPI] Failed to execute optimizer solve', err);
+    return null;
+  }
+}
+
+// 7. Trigger Live Compare (Greedy Baseline vs Metaheuristic) on Distribution Intelligence
+export async function fetchOptimizerCompare(problemPayload?: any) {
+  try {
+    const res = await resilientFetch('intelligence', '/api/optimizer/compare', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(problemPayload || {}),
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    return await res.json();
+  } catch (err) {
+    console.warn('[AdminAPI] Failed to execute optimizer comparison', err);
+    return null;
+  }
+}
+
+// 8. Fetch Live Simulation State from Logistics Sandbox
+export async function fetchSimulationState() {
+  try {
+    const res = await resilientFetch('sandbox', '/api/simulation/state');
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    return await res.json();
+  } catch (err) {
+    console.warn('[AdminAPI] Failed to fetch simulation state', err);
+    return null;
+  }
+}
+
+// 9. Control Simulation in Logistics Sandbox
+export async function controlSimulation(action: 'start' | 'stop' | 'pause' | 'resume' | 'step', payload?: any) {
+  try {
+    const res = await resilientFetch('sandbox', `/api/simulation/${action}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload || {}),
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    return await res.json();
+  } catch (err) {
+    console.warn(`[AdminAPI] Failed to send simulation command: ${action}`, err);
+    return null;
+  }
 }

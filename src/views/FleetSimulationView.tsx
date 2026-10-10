@@ -15,6 +15,7 @@ import {
   Crosshair
 } from 'lucide-react';
 import { useAdmin } from '../context/AdminContext';
+import { controlSimulation, fetchSimulationState } from '../api';
 
 interface CourierVehicle {
   id: string;
@@ -163,6 +164,40 @@ export const FleetSimulationView: React.FC = () => {
   const [showHubs, setShowHubs] = useState(true);
   const [filterType, setFilterType] = useState<string>('ALL');
   const { setNotification } = useAdmin();
+  const [isLiveSandboxConnected, setIsLiveSandboxConnected] = useState(false);
+
+  // Sync with live sandbox on mount
+  useEffect(() => {
+    fetchSimulationState().then((state) => {
+      if (state && state.stats) {
+        setIsLiveSandboxConnected(true);
+        if (typeof state.clock?.tick === 'number') {
+          setTick(state.clock.tick);
+        }
+      }
+    }).catch(() => {
+      setIsLiveSandboxConnected(false);
+    });
+  }, []);
+
+  const handleTogglePlay = async () => {
+    const nextState = !isPlaying;
+    setIsPlaying(nextState);
+    if (nextState) {
+      await controlSimulation('resume').catch(() => null);
+      setNotification({ message: 'Digital-twin simulation resumed on Port 3007', type: 'info' });
+    } else {
+      await controlSimulation('pause').catch(() => null);
+      setNotification({ message: 'Digital-twin simulation frozen on Port 3007', type: 'info' });
+    }
+  };
+
+  const handleReset = async () => {
+    setTick(0);
+    setIsPlaying(false);
+    await controlSimulation('stop').catch(() => null);
+    setNotification({ message: 'Simulation reset to initial deterministic zero-state', type: 'info' });
+  };
 
   // Tick clock effect
   useEffect(() => {
@@ -212,6 +247,12 @@ export const FleetSimulationView: React.FC = () => {
             <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-950/80 border border-emerald-800/80 text-emerald-300">
               PORT 3007 (API) / PORT 5173 (3D VITE)
             </span>
+            {isLiveSandboxConnected && (
+              <span className="inline-flex items-center gap-1 text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-950/80 border border-emerald-800/80 text-emerald-300">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                Live Sandbox Connected
+              </span>
+            )}
           </div>
           <p className="text-xs text-slate-400 mt-1">
             Deterministic digital-twin environment: injected clock, seeded RNG, agent dispatch, 2D high-definition vector map, and canonical event replay.
@@ -260,14 +301,8 @@ export const FleetSimulationView: React.FC = () => {
         <div className="flex items-center gap-3">
           <div className="flex items-center bg-slate-900 border border-slate-800 rounded-lg p-0.5">
             <button
-              onClick={() => {
-                setIsPlaying(!isPlaying);
-                setNotification({
-                  message: isPlaying ? 'Digital-twin simulation paused' : 'Digital-twin simulation resumed',
-                  type: 'info'
-                });
-              }}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium bg-slate-800 text-white hover:bg-slate-700 transition"
+              onClick={handleTogglePlay}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium bg-slate-800 text-white hover:bg-slate-700 transition cursor-pointer"
             >
               {isPlaying ? <Pause className="w-3.5 h-3.5 text-amber-400" /> : <Play className="w-3.5 h-3.5 text-emerald-400" />}
               <span>{isPlaying ? 'Freeze Clock' : 'Resume Clock'}</span>
@@ -279,7 +314,7 @@ export const FleetSimulationView: React.FC = () => {
               <button
                 key={s}
                 onClick={() => setSpeed(s)}
-                className={`px-2.5 py-1.5 rounded-md transition ${
+                className={`px-2.5 py-1.5 rounded-md transition cursor-pointer ${
                   speed === s
                     ? 'bg-blue-600 text-white font-bold'
                     : 'text-slate-400 hover:text-slate-200'
@@ -291,12 +326,8 @@ export const FleetSimulationView: React.FC = () => {
           </div>
 
           <button
-            onClick={() => {
-              setTick(0);
-              setIsPlaying(false);
-              setNotification({ message: 'Simulation reset to initial deterministic zero-state', type: 'info' });
-            }}
-            className="p-2 text-slate-400 hover:text-white bg-slate-900 border border-slate-800 rounded-lg transition"
+            onClick={handleReset}
+            className="p-2 text-slate-400 hover:text-white bg-slate-900 border border-slate-800 rounded-lg transition cursor-pointer"
             title="Reset simulation to zero-state"
           >
             <RotateCcw className="w-4 h-4" />
