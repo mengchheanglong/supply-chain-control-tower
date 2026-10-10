@@ -134,7 +134,7 @@ export const AdminSidebar: React.FC = () => {
       <div className="shrink-0 p-4 border-t border-slate-800/80 bg-slate-950/70">
         <div className="flex items-center gap-2 text-xs text-slate-400">
           <Layers className="w-3.5 h-3.5 text-blue-400" />
-          <span>Standalone Control Plane</span>
+          <span>Control Tower Active</span>
         </div>
         <p className="text-[11px] text-slate-400 mt-1">
           Connected across 5 microservice nodes on localhost.

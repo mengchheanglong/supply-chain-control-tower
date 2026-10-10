@@ -1,4 +1,4 @@
-export type OperatorRole = 'Platform Admin';
+export type OperatorRole = 'Control Tower Lead' | 'Platform Admin';
 
 export type SystemStatusState = 'healthy' | 'busy' | 'degraded';
 

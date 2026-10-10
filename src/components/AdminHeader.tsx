@@ -6,6 +6,7 @@ import {
   Clock,
   AlertTriangle,
   RotateCw,
+  TowerControl,
 } from 'lucide-react';
 import { useAdmin } from '../context/AdminContext';
 
@@ -23,13 +24,13 @@ export const AdminHeader: React.FC = () => {
       <div className="flex items-center gap-4">
         <div className="flex items-center gap-2.5">
           <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center font-bold text-white shadow-sm shadow-blue-500/20">
-            PA
+            <TowerControl className="w-5 h-5 text-white" />
           </div>
           <div>
             <h1 className="text-sm font-semibold text-white tracking-tight flex items-center gap-2">
-              Platform Administration HQ
+              Supply Chain Control Tower
               <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-blue-950/80 border border-blue-800/80 text-blue-300">
-                ECOSYSTEM CONTROL PLANE
+                ECOSYSTEM OPERATIONS CENTER
               </span>
             </h1>
             <p className="text-[11px] text-slate-400">
