@@ -14,6 +14,8 @@ import { SettlementsView } from './views/SettlementsView';
 import { AuditLogsView } from './views/AuditLogsView';
 import { SystemHealthView } from './views/SystemHealthView';
 import { Neo4jGraphView } from './views/Neo4jGraphView';
+import { HiveAnalyticsView } from './views/HiveAnalyticsView';
+import { OrdersStreamView } from './views/OrdersStreamView';
 
 const AdminContent: React.FC = () => {
   const { activeTab } = useAdmin();
@@ -22,6 +24,8 @@ const AdminContent: React.FC = () => {
     switch (activeTab) {
       case 'overview':
         return <OverviewView />;
+      case 'analytics':
+        return <HiveAnalyticsView />;
       case 'supply-chain':
         return <SupplyChainView />;
       case 'sandbox':
@@ -32,6 +36,8 @@ const AdminContent: React.FC = () => {
         return <OptimizationView />;
       case 'stores':
         return <StoresDirectoryView />;
+      case 'orders':
+        return <OrdersStreamView />;
       case 'graph':
         return <Neo4jGraphView />;
       case 'settlements':

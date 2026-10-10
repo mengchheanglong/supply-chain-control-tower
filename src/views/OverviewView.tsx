@@ -119,8 +119,15 @@ export const OverviewView: React.FC = () => {
                 </span>
               </div>
             </div>
-            <div className="pt-2 border-t border-slate-800/80 text-[11px] text-slate-400">
-              2.8% blended platform transaction fee
+            <div className="pt-2 border-t border-slate-800/80 text-[11px] flex items-center justify-between">
+              <span className="text-slate-400">2.8% blended platform fee</span>
+              <button
+                onClick={() => setActiveTab('orders')}
+                className="text-purple-400 hover:text-purple-300 font-medium flex items-center gap-0.5 cursor-pointer"
+              >
+                <span>Live Stream</span>
+                <ChevronRight className="w-3 h-3" />
+              </button>
             </div>
           </div>
 
@@ -440,7 +447,7 @@ export const OverviewView: React.FC = () => {
                     else if (node.subsystem === 'sandbox') setActiveTab('sandbox');
                     else if (node.subsystem === 'pathfinder') setActiveTab('pathfinder');
                     else if (node.subsystem === 'intelligence') setActiveTab('intelligence');
-                    else if (node.subsystem === 'e-commerce') setActiveTab('stores');
+                    else if (node.subsystem === 'e-commerce') setActiveTab('orders');
                   }}
                   className="text-xs text-blue-400 hover:text-blue-300 font-medium flex items-center gap-1"
                 >

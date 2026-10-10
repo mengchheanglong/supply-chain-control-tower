@@ -10,7 +10,9 @@ import {
   ScrollText,
   Server,
   Layers,
-  Share2
+  Share2,
+  BarChart3,
+  ShoppingBag
 } from 'lucide-react';
 import { useAdmin } from '../context/AdminContext';
 
@@ -38,6 +40,7 @@ export const AdminSidebar: React.FC = () => {
       label: 'EXECUTIVE OVERLOOK',
       items: [
         { id: 'overview', label: 'Ecosystem Overview', icon: LayoutDashboard },
+        { id: 'analytics', label: 'Big Data & Hive Analytics', icon: BarChart3 },
       ],
     },
     {
@@ -53,6 +56,7 @@ export const AdminSidebar: React.FC = () => {
       label: 'COMMERCE & OPERATIONS',
       items: [
         { id: 'stores', label: 'Stores & Onboarding', icon: Store, badge: '1,248' },
+        { id: 'orders', label: 'Live Orders Stream', icon: ShoppingBag, badge: 'Live' },
         { id: 'graph', label: 'Neo4j Graph Explorer', icon: Share2 },
         {
           id: 'settlements',
@@ -67,7 +71,7 @@ export const AdminSidebar: React.FC = () => {
       label: 'GOVERNANCE & SYSTEM',
       items: [
         { id: 'audit', label: 'Immutable Audit Trail', icon: ScrollText },
-        { id: 'system', label: 'Microservices & Health', icon: Server },
+        { id: 'system', label: 'Polyglot System Health', icon: Server },
       ],
     },
   ];

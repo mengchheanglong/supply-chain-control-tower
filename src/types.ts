@@ -142,3 +142,24 @@ export interface NavigationItem {
   badge?: string | number;
   badgeColor?: 'blue' | 'rose' | 'amber' | 'emerald';
 }
+
+export interface OrderItem {
+  product_id: string;
+  name: string;
+  price: number;
+  quantity: number;
+}
+
+export interface OrderRecord {
+  order_id: string;
+  customer_id: string;
+  customer_name: string;
+  items: OrderItem[];
+  total: number;
+  payment_method: string;
+  status: 'Delivered' | 'Out for Delivery' | 'Preparing' | 'Pending';
+  province: string;
+  address?: string;
+  date: string;
+  tracking_id?: string;
+}
