@@ -4,9 +4,9 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite --port 3300",
+    "dev": "vite --port 8300",
     "build": "tsc && vite build",
-    "preview": "vite preview --port 3300"
+    "preview": "vite preview --port 8300"
   },
   "dependencies": {
     "clsx": "^2.1.1",

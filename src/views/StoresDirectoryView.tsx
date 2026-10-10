@@ -119,7 +119,7 @@ export const StoresDirectoryView: React.FC = () => {
               E-Commerce Stores & Merchant Onboarding Directory
             </h2>
             <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-blue-950/80 border border-blue-800/80 text-blue-300">
-              1,248 ACTIVE TENANTS • PORT 3001
+              1,248 ACTIVE TENANTS • PORT 8401
             </span>
           </div>
           <p className="text-xs text-slate-400 mt-1">
@@ -142,7 +142,7 @@ export const StoresDirectoryView: React.FC = () => {
           </button>
 
           <a
-            href="http://localhost:3001"
+            href="http://localhost:8401"
             target="_blank"
             rel="noreferrer"
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium transition border border-slate-700"

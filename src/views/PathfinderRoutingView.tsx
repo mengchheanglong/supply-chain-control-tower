@@ -105,7 +105,7 @@ export const PathfinderRoutingView: React.FC = () => {
               OSM Pathfinder Physical Routing Daemon
             </h2>
             <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-blue-950/80 border border-blue-800/80 text-blue-300">
-              PORT 3000 (RUST ACTIX / TOKIO)
+              PORT 8000 (RUST ACTIX / TOKIO)
             </span>
             {isStatsLive && (
               <span className="inline-flex items-center gap-1 text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-950/80 border border-emerald-800/80 text-emerald-300">
@@ -176,7 +176,7 @@ export const PathfinderRoutingView: React.FC = () => {
               <span>Interactive Physical Route Calculation (Live Query)</span>
             </h3>
             <p className="text-xs text-slate-400 mt-0.5">
-              Execute live routing requests against osm-pathfinder on Port 3000 across Cambodian geography.
+              Execute live routing requests against osm-pathfinder on Port 8000 across Cambodian geography.
             </p>
           </div>
           <span className="text-xs font-mono text-blue-400 bg-blue-950/60 border border-blue-900/60 px-2 py-1 rounded">

@@ -168,7 +168,7 @@ export const SupplyChainView: React.FC = () => {
               Supply Chain Operations Platform
             </h2>
             <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-blue-950/80 border border-blue-800/80 text-blue-300">
-              PORT 3100 (API) / PORT 3101 (WEB)
+              PORT 8100 (API) / PORT 8101 (WEB)
             </span>
             {isLiveConnected ? (
               <span className="inline-flex items-center gap-1 text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-950/80 border border-emerald-800/80 text-emerald-300">
@@ -197,7 +197,7 @@ export const SupplyChainView: React.FC = () => {
             <span>Sync Master Data</span>
           </button>
           <a
-            href="http://localhost:3101"
+            href="http://localhost:8101"
             target="_blank"
             rel="noreferrer"
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-medium transition shadow-sm"

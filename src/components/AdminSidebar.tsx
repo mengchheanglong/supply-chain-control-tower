@@ -46,10 +46,10 @@ export const AdminSidebar: React.FC = () => {
     {
       label: 'INTEGRATED PLATFORMS',
       items: [
-        { id: 'supply-chain', label: 'Supply Chain Ops', icon: Boxes, port: 3100 },
-        { id: 'sandbox', label: 'Logistics Sandbox', icon: Truck, port: 3007 },
-        { id: 'pathfinder', label: 'OSM Pathfinder', icon: MapPin, port: 3000 },
-        { id: 'intelligence', label: 'Distribution Solver', icon: Cpu, port: 3200 },
+        { id: 'supply-chain', label: 'Supply Chain Ops', icon: Boxes, port: 8100 },
+        { id: 'sandbox', label: 'Logistics Sandbox', icon: Truck, port: 8500 },
+        { id: 'pathfinder', label: 'OSM Pathfinder', icon: MapPin, port: 8000 },
+        { id: 'intelligence', label: 'Distribution Solver', icon: Cpu, port: 8200 },
       ],
     },
     {

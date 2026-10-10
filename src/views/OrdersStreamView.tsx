@@ -269,7 +269,7 @@ export const OrdersStreamView: React.FC = () => {
               Real Orders Ingestion Stream (MongoDB ACID Ledger)
             </h2>
             <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-blue-950/80 border border-blue-800/80 text-blue-300">
-              PORT 3001 (E-COMMERCE STREAM)
+              PORT 8401 (E-COMMERCE STREAM)
             </span>
           </div>
           <p className="text-xs text-slate-400 mt-1">
@@ -297,12 +297,12 @@ export const OrdersStreamView: React.FC = () => {
           </button>
 
           <a
-            href="http://localhost:3001/admin"
+            href="http://localhost:8401/admin"
             target="_blank"
             rel="noreferrer"
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium border border-slate-700 transition"
           >
-            <span>E-Commerce Reference (:3001)</span>
+            <span>E-Commerce Reference (:8401)</span>
             <ExternalLink className="w-3.5 h-3.5" />
           </a>
         </div>
@@ -503,7 +503,7 @@ export const OrdersStreamView: React.FC = () => {
                       </button>
 
                       <a
-                        href={`http://localhost:3001/orders/${order.order_id}`}
+                        href={`http://localhost:8401/orders/${order.order_id}`}
                         target="_blank"
                         rel="noreferrer"
                         className="px-2 py-1 rounded bg-blue-600/20 hover:bg-blue-600/30 text-blue-400 text-xs font-sans font-medium flex items-center gap-1 transition"
@@ -606,7 +606,7 @@ export const OrdersStreamView: React.FC = () => {
                 Close
               </button>
               <a
-                href={`http://localhost:3001/orders/${selectedOrder.order_id}`}
+                href={`http://localhost:8401/orders/${selectedOrder.order_id}`}
                 target="_blank"
                 rel="noreferrer"
                 className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold transition flex items-center gap-1.5"

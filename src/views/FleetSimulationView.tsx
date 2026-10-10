@@ -185,10 +185,10 @@ export const FleetSimulationView: React.FC = () => {
     setIsPlaying(nextState);
     if (nextState) {
       await controlSimulation('resume').catch(() => null);
-      setNotification({ message: 'Digital-twin simulation resumed on Port 3007', type: 'info' });
+      setNotification({ message: 'Digital-twin simulation resumed on Port 8500', type: 'info' });
     } else {
       await controlSimulation('pause').catch(() => null);
-      setNotification({ message: 'Digital-twin simulation frozen on Port 3007', type: 'info' });
+      setNotification({ message: 'Digital-twin simulation frozen on Port 8500', type: 'info' });
     }
   };
 
@@ -245,7 +245,7 @@ export const FleetSimulationView: React.FC = () => {
               Logistics Digital-Twin Simulation Sandbox & Live Road Map
             </h2>
             <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-950/80 border border-emerald-800/80 text-emerald-300">
-              PORT 3007 (API) / PORT 5173 (3D VITE)
+              PORT 8500 (API) / PORT 8501 (3D VITE)
             </span>
             {isLiveSandboxConnected && (
               <span className="inline-flex items-center gap-1 text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-950/80 border border-emerald-800/80 text-emerald-300">

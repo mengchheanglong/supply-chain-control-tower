@@ -90,7 +90,7 @@ export const OptimizationView: React.FC = () => {
               Distribution Intelligence Solver
             </h2>
             <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-purple-950/80 border border-purple-800/80 text-purple-300">
-              PORT 3200 (VRPTW SOLVER)
+              PORT 8200 (VRPTW SOLVER)
             </span>
             {isLiveResult && (
               <span className="inline-flex items-center gap-1 text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-950/80 border border-emerald-800/80 text-emerald-300">
@@ -112,7 +112,7 @@ export const OptimizationView: React.FC = () => {
           {isSolving ? (
             <>
               <RotateCw className="w-3.5 h-3.5 animate-spin" />
-              <span>Solving VRPTW on Port 3200...</span>
+              <span>Solving VRPTW on Port 8200...</span>
             </>
           ) : (
             <>
@@ -228,7 +228,7 @@ export const OptimizationView: React.FC = () => {
             <div className="flex items-center gap-2">
               <Truck className="w-4 h-4 text-purple-400" />
               <h3 className="text-xs font-semibold text-white tracking-wide uppercase">
-                Optimized Vehicle Tour Sequences (From Port 3200)
+                Optimized Vehicle Tour Sequences (From Port 8200)
               </h3>
             </div>
             <span className="text-xs font-mono text-purple-300">
