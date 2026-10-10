@@ -1,6 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import {
-  OperatorRole,
   TrustChips,
   HeadlineKPIs,
   ActivationFunnel,
@@ -23,9 +22,6 @@ import {
 } from '../api';
 
 interface AdminContextType {
-  role: OperatorRole;
-  setRole: (role: OperatorRole) => void;
-  toggleRole: () => void;
   activeTab: string;
   setActiveTab: (tab: string) => void;
   isSearchOpen: boolean;
@@ -53,7 +49,6 @@ interface AdminContextType {
 const AdminContext = createContext<AdminContextType | undefined>(undefined);
 
 export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [role, setRole] = useState<OperatorRole>('Super Admin');
   const [activeTab, setActiveTab] = useState<string>('overview');
   const [isSearchOpen, setIsSearchOpen] = useState<boolean>(false);
   const [notification, setNotification] = useState<{ message: string; type: 'success' | 'error' | 'info' } | null>(null);
@@ -73,10 +68,6 @@ export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const [stores, setStores] = useState<StoreTenant[]>(INITIAL_STORES);
   const [auditLogs, setAuditLogs] = useState<AuditLogEntry[]>(INITIAL_AUDIT_LOGS);
   const [microserviceNodes, setMicroserviceNodes] = useState<PlatformNodeTelemetry[]>([]);
-
-  const toggleRole = () => {
-    setRole(prev => (prev === 'Super Admin' ? 'Admin' : 'Super Admin'));
-  };
 
   const notify = (message: string, type: 'success' | 'error' | 'info' = 'info') => {
     setNotification({ message, type });
@@ -120,8 +111,8 @@ export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     const newAudit: AuditLogEntry = {
       id: `aud-${Date.now().toString().slice(-4)}`,
       timestamp: new Date().toISOString(),
-      actor: `${role.toLowerCase().replace(' ', '')}@platform.internal`,
-      role,
+      actor: 'admin@platform.internal',
+      role: 'Platform Admin',
       action: 'KYC_APPROVE',
       targetType: 'KYC_RECORD',
       targetId: id,
@@ -141,8 +132,8 @@ export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     const newAudit: AuditLogEntry = {
       id: `aud-${Date.now().toString().slice(-4)}`,
       timestamp: new Date().toISOString(),
-      actor: `${role.toLowerCase().replace(' ', '')}@platform.internal`,
-      role,
+      actor: 'admin@platform.internal',
+      role: 'Platform Admin',
       action: 'KYC_REJECT',
       targetType: 'KYC_RECORD',
       targetId: id,
@@ -153,13 +144,8 @@ export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     notify(`KYC for ${item.storeName} rejected. Reason recorded.`, 'error');
   };
 
-  // Payout Authorization (Gated: Super Admin Only)
+  // Payout Authorization (Direct execution)
   const authorizePayout = (id: string, justification: string): boolean => {
-    if (role !== 'Super Admin') {
-      notify('Access Denied: Payout execution requires Super Admin role.', 'error');
-      return false;
-    }
-
     const item = payoutsQueue.find(p => p.id === id);
     if (!item) return false;
 
@@ -168,8 +154,8 @@ export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     const newAudit: AuditLogEntry = {
       id: `aud-${Date.now().toString().slice(-4)}`,
       timestamp: new Date().toISOString(),
-      actor: 'superadmin@platform.internal',
-      role: 'Super Admin',
+      actor: 'admin@platform.internal',
+      role: 'Platform Admin',
       action: 'PAYOUT_AUTHORIZE',
       targetType: 'PAYOUT',
       targetId: id,
@@ -192,8 +178,8 @@ export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     const newAudit: AuditLogEntry = {
       id: `aud-${Date.now().toString().slice(-4)}`,
       timestamp: new Date().toISOString(),
-      actor: `${role.toLowerCase().replace(' ', '')}@platform.internal`,
-      role,
+      actor: 'admin@platform.internal',
+      role: 'Platform Admin',
       action: 'STORE_SUSPEND',
       targetType: 'STORE',
       targetId: storeId,
@@ -214,8 +200,8 @@ export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     const newAudit: AuditLogEntry = {
       id: `aud-${Date.now().toString().slice(-4)}`,
       timestamp: new Date().toISOString(),
-      actor: `${role.toLowerCase().replace(' ', '')}@platform.internal`,
-      role,
+      actor: 'admin@platform.internal',
+      role: 'Platform Admin',
       action: 'STORE_REINSTATE',
       targetType: 'STORE',
       targetId: storeId,
@@ -229,9 +215,6 @@ export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   return (
     <AdminContext.Provider
       value={{
-        role,
-        setRole,
-        toggleRole,
         activeTab,
         setActiveTab,
         isSearchOpen,

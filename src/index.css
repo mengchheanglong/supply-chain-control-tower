@@ -13,6 +13,11 @@ body {
   color: #f1f5f9;
 }
 
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #1e293b #090d16;
+}
+
 /* Custom scrollbars for clean console experience */
 ::-webkit-scrollbar {
   width: 6px;

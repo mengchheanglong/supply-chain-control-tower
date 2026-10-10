@@ -6,7 +6,6 @@ import {
   CheckCircle2,
   Clock,
   ArrowRight,
-  Shield,
   Store,
   ExternalLink,
   ChevronRight
@@ -23,7 +22,6 @@ export const OverviewView: React.FC = () => {
     payoutsQueue,
     microserviceNodes,
     setActiveTab,
-    role
   } = useAdmin();
 
   const [selectedKyc, setSelectedKyc] = useState<KycVerificationItem | null>(null);
@@ -38,12 +36,6 @@ export const OverviewView: React.FC = () => {
           <p className="text-xs text-slate-400 mt-0.5">
             Real-time executive oversight, cross-platform telemetry, and SLA-governed action queues.
           </p>
-        </div>
-        <div className="flex items-center gap-2">
-          <span className="text-xs text-slate-400">Current Role Clearance:</span>
-          <span className="text-xs font-semibold px-2 py-0.5 rounded bg-blue-950/80 border border-blue-800/80 text-blue-300">
-            {role}
-          </span>
         </div>
       </div>
 
@@ -371,14 +363,10 @@ export const OverviewView: React.FC = () => {
 
                     <button
                       onClick={() => setSelectedPayout(item)}
-                      className={`px-3 py-1.5 rounded-lg text-xs font-medium transition shrink-0 flex items-center gap-1.5 ${
-                        role === 'Super Admin'
-                          ? 'bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-400 border border-emerald-500/30'
-                          : 'bg-slate-800 text-slate-400 border border-slate-700'
-                      }`}
+                      className="px-3 py-1.5 rounded-lg text-xs font-medium transition shrink-0 flex items-center gap-1.5 bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-400 border border-emerald-500/30"
                     >
-                      <Shield className="w-3 h-3" />
-                      <span>{role === 'Super Admin' ? 'Execute' : 'Restricted'}</span>
+                      <DollarSign className="w-3.5 h-3.5" />
+                      <span>Execute</span>
                     </button>
                   </div>
                 ))

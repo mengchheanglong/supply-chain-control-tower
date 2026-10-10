@@ -1,8 +1,6 @@
 import React from 'react';
 import {
   Search,
-  Shield,
-  ShieldAlert,
   Activity,
   CheckCircle2,
   Clock,
@@ -13,8 +11,6 @@ import { useAdmin } from '../context/AdminContext';
 
 export const AdminHeader: React.FC = () => {
   const {
-    role,
-    toggleRole,
     trustChips,
     setIsSearchOpen,
     refreshTelemetry,
@@ -22,7 +18,7 @@ export const AdminHeader: React.FC = () => {
   } = useAdmin();
 
   return (
-    <header className="sticky top-0 z-30 bg-[#0c1322]/95 backdrop-blur border-b border-slate-800 px-6 py-3.5 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+    <header className="sticky top-0 z-30 shrink-0 bg-[#0c1322]/95 backdrop-blur border-b border-slate-800 px-6 py-3 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
       {/* Left: Brand + Universal Search */}
       <div className="flex items-center gap-4">
         <div className="flex items-center gap-2.5">
@@ -93,43 +89,16 @@ export const AdminHeader: React.FC = () => {
         </div>
       </div>
 
-      {/* Right: Operator Role Switcher + Manual Refresh */}
-      <div className="flex items-center gap-3">
+      {/* Right: Manual Telemetry Refresh Button */}
+      <div className="flex items-center gap-2">
         <button
           onClick={() => refreshTelemetry()}
-          className="p-1.5 text-slate-400 hover:text-slate-200 hover:bg-slate-800 rounded transition"
+          className="flex items-center gap-1.5 px-2.5 py-1.5 text-xs text-slate-400 hover:text-slate-200 bg-slate-900 border border-slate-800 hover:border-slate-700 rounded-lg transition"
           title="Refresh microservice telemetry probes"
         >
-          <RotateCw className="w-4 h-4" />
+          <RotateCw className="w-3.5 h-3.5" />
+          <span className="hidden sm:inline">Refresh</span>
         </button>
-
-        {/* Role Switcher Pill */}
-        <div className="flex items-center bg-slate-900 border border-slate-800 rounded-lg p-0.5">
-          <button
-            onClick={toggleRole}
-            className={`flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium transition ${
-              role === 'Super Admin'
-                ? 'bg-blue-600 text-white shadow-sm'
-                : 'text-slate-400 hover:text-slate-200'
-            }`}
-            title="Super Admin has clearance for payout authorization and store suspension"
-          >
-            <Shield className="w-3.5 h-3.5" />
-            <span>Super Admin</span>
-          </button>
-          <button
-            onClick={toggleRole}
-            className={`flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium transition ${
-              role === 'Admin'
-                ? 'bg-slate-800 text-slate-200 shadow-sm'
-                : 'text-slate-400 hover:text-slate-200'
-            }`}
-            title="Admin has standard verification and review permissions (least-privilege)"
-          >
-            <ShieldAlert className="w-3.5 h-3.5" />
-            <span>Admin</span>
-          </button>
-        </div>
       </div>
 
       {/* Toast Notification Banner */}

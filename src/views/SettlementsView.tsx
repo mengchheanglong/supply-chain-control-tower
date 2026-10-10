@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { DollarSign, CheckCircle2, Clock, Shield, Lock, FileText } from 'lucide-react';
+import { DollarSign, CheckCircle2, Clock, Shield, FileText } from 'lucide-react';
 import { useAdmin } from '../context/AdminContext';
 import { KycModal, PayoutModal } from '../components/ActionModals';
 import { KycVerificationItem, PayoutRequestItem } from '../types';
 
 export const SettlementsView: React.FC = () => {
-  const { kycQueue, payoutsQueue, role } = useAdmin();
+  const { kycQueue, payoutsQueue } = useAdmin();
   const [selectedKyc, setSelectedKyc] = useState<KycVerificationItem | null>(null);
   const [selectedPayout, setSelectedPayout] = useState<PayoutRequestItem | null>(null);
 
@@ -28,13 +28,6 @@ export const SettlementsView: React.FC = () => {
           <p className="text-xs text-slate-400 mt-1">
             24h SLA for merchant bank KYC approvals; 48h SLA for scheduled ACH/wire payout disbursements.
           </p>
-        </div>
-
-        <div className="flex items-center gap-2">
-          <span className="text-xs text-slate-400">Clearance:</span>
-          <span className="text-xs font-semibold px-2 py-0.5 rounded bg-slate-900 border border-slate-800 text-slate-200">
-            {role}
-          </span>
         </div>
       </div>
 
@@ -68,12 +61,12 @@ export const SettlementsView: React.FC = () => {
 
         <div className="bg-[#0f172a] border border-slate-800 rounded-xl p-5 space-y-2">
           <div className="flex items-center justify-between text-xs text-slate-400">
-            <span>Access Policy</span>
-            <Shield className="w-4 h-4 text-blue-400" />
+            <span>Disbursement Governance</span>
+            <Shield className="w-4 h-4 text-emerald-400" />
           </div>
-          <div className="text-sm font-semibold text-white">Super Admin Gated</div>
+          <div className="text-sm font-semibold text-white">Direct Authority Active</div>
           <p className="text-[11px] text-slate-400">
-            Dual-control approval prevents unauthorized balance drainage.
+            Automated scheduled ACH and wire settlement batch transfers.
           </p>
         </div>
       </div>
@@ -221,23 +214,10 @@ export const SettlementsView: React.FC = () => {
                     <td className="table-cell text-right">
                       <button
                         onClick={() => setSelectedPayout(item)}
-                        className={`px-3 py-1 rounded-md text-xs font-medium transition flex items-center gap-1 ml-auto ${
-                          role === 'Super Admin'
-                            ? 'bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-400 border border-emerald-500/30'
-                            : 'bg-slate-800 text-slate-400 border border-slate-700'
-                        }`}
+                        className="px-3 py-1 rounded-md text-xs font-medium transition flex items-center gap-1 ml-auto bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-400 border border-emerald-500/30"
                       >
-                        {role === 'Super Admin' ? (
-                          <>
-                            <Shield className="w-3 h-3" />
-                            <span>Authorize</span>
-                          </>
-                        ) : (
-                          <>
-                            <Lock className="w-3 h-3" />
-                            <span>Gated</span>
-                          </>
-                        )}
+                        <CheckCircle2 className="w-3 h-3" />
+                        <span>Authorize</span>
                       </button>
                     </td>
                   </tr>

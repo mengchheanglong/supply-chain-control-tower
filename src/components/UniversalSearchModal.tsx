@@ -182,7 +182,7 @@ export const UniversalSearchModal: React.FC = () => {
                     </div>
                   </div>
                   <span className="text-[10px] px-2 py-0.5 rounded bg-blue-950/60 text-blue-300 border border-blue-800/60">
-                    SUPER ADMIN GATED
+                    AWAITING ACTION
                   </span>
                 </div>
               ))}

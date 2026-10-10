@@ -1,4 +1,4 @@
-export type OperatorRole = 'Admin' | 'Super Admin';
+export type OperatorRole = 'Platform Admin';
 
 export type SystemStatusState = 'healthy' | 'busy' | 'degraded';
 
@@ -81,8 +81,8 @@ export interface PayoutRequestItem {
   slaExpiresAt: string;
   hoursRemaining: number;
   isBreached: boolean;
-  status: 'AWAITING_SUPER_ADMIN' | 'PROCESSING' | 'COMPLETED' | 'HELD';
-  isGatedByRole: boolean;
+  status: 'PENDING' | 'PROCESSING' | 'COMPLETED' | 'HELD';
+  isGatedByRole?: boolean;
 }
 
 export interface SupportCaseItem {

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, Shield, AlertTriangle, CheckCircle, FileText, Lock } from 'lucide-react';
+import { X, Shield, AlertTriangle, CheckCircle, FileText } from 'lucide-react';
 import { useAdmin } from '../context/AdminContext';
 import { KycVerificationItem, PayoutRequestItem, StoreTenant } from '../types';
 
@@ -105,12 +105,10 @@ interface PayoutModalProps {
 }
 
 export const PayoutModal: React.FC<PayoutModalProps> = ({ item, onClose }) => {
-  const { role, authorizePayout } = useAdmin();
+  const { authorizePayout } = useAdmin();
   const [justification, setJustification] = useState('');
 
   if (!item) return null;
-
-  const isSuperAdmin = role === 'Super Admin';
 
   return (
     <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
@@ -126,15 +124,6 @@ export const PayoutModal: React.FC<PayoutModalProps> = ({ item, onClose }) => {
         </div>
 
         <div className="p-6 space-y-4">
-          {!isSuperAdmin && (
-            <div className="p-3 rounded-lg bg-rose-950/30 border border-rose-800/80 text-rose-300 text-xs flex items-center gap-2">
-              <Lock className="w-4 h-4 shrink-0 text-rose-400" />
-              <span>
-                Least-privilege policy: Payout disbursement is restricted to <strong>Super Admin</strong>. Switch role in the header to execute.
-              </span>
-            </div>
-          )}
-
           <div className="bg-slate-900/80 p-4 rounded-lg border border-slate-800 space-y-2 text-xs">
             <div className="flex justify-between">
               <span className="text-slate-400">Beneficiary:</span>
@@ -184,17 +173,12 @@ export const PayoutModal: React.FC<PayoutModalProps> = ({ item, onClose }) => {
               Cancel
             </button>
             <button
-              disabled={!isSuperAdmin}
               onClick={() => {
                 if (authorizePayout(item.id, justification)) {
                   onClose();
                 }
               }}
-              className={`px-4 py-2 rounded-lg text-xs font-medium transition flex items-center gap-1.5 ${
-                isSuperAdmin
-                  ? 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-sm'
-                  : 'bg-slate-800 text-slate-500 cursor-not-allowed border border-slate-700'
-              }`}
+              className="px-4 py-2 rounded-lg text-xs font-medium transition flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-500 text-white shadow-sm"
             >
               <CheckCircle className="w-4 h-4" />
               <span>Authorize ACH/Wire Wire Transfer</span>

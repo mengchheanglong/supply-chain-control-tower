@@ -71,8 +71,9 @@ export const AdminSidebar: React.FC = () => {
   ];
 
   return (
-    <aside className="w-64 bg-[#0a0f1d] border-r border-slate-800 flex flex-col shrink-0 h-[calc(100vh-65px)] overflow-y-auto">
-      <div className="p-4 space-y-6">
+    <aside className="w-64 bg-[#0a0f1d] border-r border-slate-800 flex flex-col shrink-0 h-full overflow-hidden select-none">
+      {/* Scrollable Navigation Area */}
+      <div className="flex-1 overflow-y-auto p-4 space-y-6">
         {sections.map(section => (
           <div key={section.label} className="space-y-1">
             <h2 className="px-2.5 text-[10px] font-semibold tracking-wider text-slate-400 uppercase">
@@ -123,8 +124,8 @@ export const AdminSidebar: React.FC = () => {
         ))}
       </div>
 
-      {/* Footer workspace status summary */}
-      <div className="mt-auto p-4 border-t border-slate-800/80 bg-slate-950/50">
+      {/* Pinned Bottom Status Bar */}
+      <div className="shrink-0 p-4 border-t border-slate-800/80 bg-slate-950/70">
         <div className="flex items-center gap-2 text-xs text-slate-400">
           <Layers className="w-3.5 h-3.5 text-blue-400" />
           <span>Standalone Control Plane</span>
