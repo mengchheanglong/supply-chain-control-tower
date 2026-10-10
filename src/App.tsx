@@ -13,6 +13,7 @@ import { StoresDirectoryView } from './views/StoresDirectoryView';
 import { SettlementsView } from './views/SettlementsView';
 import { AuditLogsView } from './views/AuditLogsView';
 import { SystemHealthView } from './views/SystemHealthView';
+import { Neo4jGraphView } from './views/Neo4jGraphView';
 
 const AdminContent: React.FC = () => {
   const { activeTab } = useAdmin();
@@ -31,6 +32,8 @@ const AdminContent: React.FC = () => {
         return <OptimizationView />;
       case 'stores':
         return <StoresDirectoryView />;
+      case 'graph':
+        return <Neo4jGraphView />;
       case 'settlements':
         return <SettlementsView />;
       case 'audit':

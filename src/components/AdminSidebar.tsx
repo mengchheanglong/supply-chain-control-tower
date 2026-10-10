@@ -9,7 +9,8 @@ import {
   DollarSign,
   ScrollText,
   Server,
-  Layers
+  Layers,
+  Share2
 } from 'lucide-react';
 import { useAdmin } from '../context/AdminContext';
 
@@ -51,7 +52,8 @@ export const AdminSidebar: React.FC = () => {
     {
       label: 'COMMERCE & OPERATIONS',
       items: [
-        { id: 'stores', label: 'Stores Directory', icon: Store, badge: '1,248' },
+        { id: 'stores', label: 'Stores & Onboarding', icon: Store, badge: '1,248' },
+        { id: 'graph', label: 'Neo4j Graph Explorer', icon: Share2 },
         {
           id: 'settlements',
           label: 'Settlements & KYC',
