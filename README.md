@@ -8,11 +8,11 @@ Port: `3300`
 
 The **Supply Chain Control Tower** provides sovereign end-to-end visibility and real-time execution across the entire multi-repository ecosystem:
 
-1. **E-Commerce Commercial Front & Demand**: Live customer order ingestion and checkout bridge (`ecommerce-hive-nosql` on port `3001`).
+1. **E-Commerce Commercial Front & Demand**: Live customer order ingestion and checkout bridge (`ecommerce-storefront` on port `3001`).
 2. **Operational Warehouse & Inventory Ledger**: Real-time facility stock levels, double-entry inventory ledger movements, and picking/packing fulfillment workflows (`supply-chain-platform` on port `3100`).
 3. **Fleet Dispatch & Simulation**: Fleet vehicle routing, telematics, traffic conditions, driver dispatching, and chaos simulation (`logistics-sandbox` on port `3007`).
 4. **Physical Road Routing Engine**: Turn-by-turn road network routing, A* graph traversal, and geometry rendering (`osm-pathfinder` on port `3000`).
-5. **AI Distribution Optimization Cockpit**: Fleet Vehicle Routing with Time Windows (VRPTW) solver, financial cost-to-serve analytics, and scenario evaluation (`distribution-intelligence` on port `3200`).
+5. **AI Fleet Route Optimization Cockpit**: Fleet Vehicle Routing with Time Windows (VRPTW) solver, financial cost-to-serve analytics, and scenario evaluation (`fleet-route-optimizer` on port `3200`).
 6. **Polyglot System Telemetry**: Real-time health, latency, error rates, and circuit monitoring across all backend microservice nodes.
 
 ---
